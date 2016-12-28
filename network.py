@@ -110,7 +110,7 @@ class Network():
 
 def train(size=None, epochs=40, batch_size=50, eta=3.0):
     import data_loader
-    a, b, c = data_loader.load_data_raw()
+    a, b, c = data_loader.load_data()
     if size:
         net = Network(size)
     else:
