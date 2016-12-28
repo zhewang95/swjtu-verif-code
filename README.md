@@ -6,25 +6,18 @@
 目前，字母分割准确率不高为主要问题，分割错误率大于5%  
 分割后的单个字母识别错误率大概小于2%  
 后期考虑在字母分割阶段加入神经网络识别过程，提高分割正确率  
-  
 
-### Example output
+###主要源文件
 
-| expected | actual | diff |
-| --- | --- | --- |
-| ![](test/fixtures/4a.png) | ![](test/fixtures/4b.png) | ![1diff](test/fixtures/4diff.png) |
-| ![](test/fixtures/3a.png) | ![](test/fixtures/3b.png) | ![1diff](test/fixtures/3diff.png) |
-| ![](test/fixtures/1a.png) | ![](test/fixtures/1b.png) | ![1diff](test/fixtures/1diff.png) |
+|源文件               |功能                |
+|:--------------------|:-----------------|
+|pic_graber.py       |验证码训练数据爬取     |
+|data_generator.py   |生成训练/验证/测试数据 |
+|preprocessor.py     |输入数据预处理        |
+|data_loader.py      |从pickle中加载训练数据|
+|network.py          |BP神经网络           |
+|dean_login.py       |登录测试             |
 
- 
- |源文件               |功能                |
- |:--------------------|:-----------------|
- |pic_graber.py       |验证码训练数据爬取     |
- |data_generator.py   |生成训练/验证/测试数据 |
- |preprocessor.py     |输入数据预处理        |
- |data_loader.py      |从pickle中加载训练数据|
- |network.py          |BP神经网络           |
- |dean_login.py       |登录测试             |
 
 `data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，`network.pkl`为已经训练好的网络参数  
  
