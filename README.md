@@ -9,6 +9,12 @@
   
  主要包含以下几个源文件:  
  
+ | expected | actual | diff |
+| --- | --- | --- |
+| ![](test/fixtures/4a.png) | ![](test/fixtures/4b.png) | ![1diff](test/fixtures/4diff.png) |
+| ![](test/fixtures/3a.png) | ![](test/fixtures/3b.png) | ![1diff](test/fixtures/3diff.png) |
+| ![](test/fixtures/1a.png) | ![](test/fixtures/1b.png) | ![1diff](test/fixtures/1diff.png) |
+ 
  |源文件               |功能                |
  |:--------------------|:-----------------|
  |pic_graber.py       |验证码训练数据爬取     |
