@@ -8,9 +8,7 @@
 后期考虑在字母分割阶段加入神经网络识别过程，提高分割正确率  
   
  主要包含以下几个源文件:  
-| 源文件 | 功能 |
-| --- | --- | --- |
-| pic_graber.py |验证码训练数据爬取|
+ 
  |源文件               |功能                |
  |:--------------------|:-----------------|
  |pic_graber.py       |验证码训练数据爬取     |
@@ -23,12 +21,12 @@
 `data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，`network.pkl`为已经训练好的网络参数  
  
 示例：
-1. 快速测试
+1.快速测试
 ```
 	from dean_login import login
 	login('教务账号','密码')
 ```
-2. 训练  
+2.训练  
 ```
 	from data_loader import load_data
 	from network import Network
