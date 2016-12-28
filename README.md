@@ -7,13 +7,15 @@
 分割后的单个字母识别错误率大概小于2%  
 后期考虑在字母分割阶段加入神经网络识别过程，提高分割正确率  
   
- 主要包含以下几个源文件:  
- 
- | expected | actual | diff |
+
+### Example output
+
+| expected | actual | diff |
 | --- | --- | --- |
 | ![](test/fixtures/4a.png) | ![](test/fixtures/4b.png) | ![1diff](test/fixtures/4diff.png) |
 | ![](test/fixtures/3a.png) | ![](test/fixtures/3b.png) | ![1diff](test/fixtures/3diff.png) |
 | ![](test/fixtures/1a.png) | ![](test/fixtures/1b.png) | ![1diff](test/fixtures/1diff.png) |
+
  
  |源文件               |功能                |
  |:--------------------|:-----------------|
