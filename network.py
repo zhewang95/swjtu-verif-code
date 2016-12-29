@@ -46,7 +46,7 @@ class Network():
         st1 = st
         print "start training at {0}".format(st)
         for i in xrange(epochs):
-            random.shuffle(training_data)
+            random.shuffle(training_data)  # stochastic
             batchs = [training_data[pos:pos + batch_size] for pos in xrange(0, l, batch_size)]
             for batch in batchs:
                 self.process_one_batch(batch, eta)
@@ -56,7 +56,8 @@ class Network():
             st = t
             if test_data:
                 print "test result: {0}/{1}".format(self.evaluate(test_data), len(test_data))
-        print "{0} Epoches ended in {1}".format(epochs, t - st1)
+        print "{0} Epochs ended in {1}".format(epochs, t - st1)
+
         if self.retrain:
             self.save_param()
 

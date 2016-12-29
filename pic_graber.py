@@ -63,9 +63,7 @@ def getOne(username,password):
         return
     res=login(username,password,session,text)
     if(res):
-
         global locknum
-
         with locknum:
             global index
             tempindex=index.value

@@ -1,4 +1,4 @@
-##基于BP神经网络的swjtu教务网验证码识别
+##基于BP神经网络的swjtu教务网验登录证码识别系统
 ![](bp.png)  
 
 参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！
@@ -11,7 +11,7 @@
 
 |源文件               |功能                |
 |:--------------------|:-----------------|
-|pic_graber.py       |验证码训练数据爬取     |
+|pic_graber.py       |验证码训练数据爬取    |
 |data_generator.py   |生成训练/验证/测试数据 |
 |preprocessor.py     |输入数据预处理        |
 |data_loader.py      |从pickle中加载训练数据|
@@ -19,7 +19,7 @@
 |dean_login.py       |登录测试             |
 
 
-`data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，`network.pkl`为已经训练好的网络参数  
+`data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，包含200k张训练图片(单个字符)以及验证和测试图片，`network.pkl`为已经训练好的网络参数
  
 示例：
 

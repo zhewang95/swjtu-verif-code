@@ -32,7 +32,7 @@ def login(username,password):
 def benchmark():
     count=0
     for i in range(1000):
-        if login('20132185','w1995119100'):
+        if login('',''): #教务账号
             print "登录成功"
             count+=1
         else:
