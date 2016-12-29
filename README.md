@@ -24,7 +24,7 @@
 ###示例：
 
 1.作为api调用
-```
+```python
 from dean_login import login
 res,session=login('教务账号','密码')  #res:登录是否成功，session:登录成功后获取的requests session对象
 if res:
@@ -32,7 +32,7 @@ if res:
     print response.text
 ```
 2.训练  
-```
+```python
 from data_loader import load_data
 from network import Network
 training,validate,test=load_data() #将训练数据解压后使用load_data_raw函数速度更快
