@@ -23,20 +23,21 @@
  
 示例：
 
-1.快速测试
+1.作为api调用
 ```
-	from dean_login import login
-	login('教务账号','密码')
+from dean_login import login
+res,session=login('教务账号','密码')  #返回登录是否成功标记res，和登录成功获得的requests session
+response=session.get('http://jiaowu.swjtu.edu.cn/student/score/ScoreNew.jsp')
+print response.text
 ```
 2.训练  
 ```
-	from data_loader import load_data
-	from network import Network
-	training,validate,test=load_data() #将训练数据解压后使用load_data_raw函数速度更快
-	net=Network([17*17,20,26]) #也可不带参数，默认参数为[17*17,20,26]
-	net.SGD(training,40,50,3.0,test) #随机梯度下降算法，也可不带参数
+from data_loader import load_data
+from network import Network
+training,validate,test=load_data() #将训练数据解压后使用load_data_raw函数速度更快
+net=Network([17*17,20,26]) #也可不带参数，默认参数为[17*17,20,26]
+net.SGD(training,40,50,3.0,test) #随机梯度下降算法，也可不带参数
 ```
-
 
 代码目前还很buggy
 

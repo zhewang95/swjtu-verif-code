@@ -27,12 +27,17 @@ def login(username,password):
     for i in chars:
         verif_code.append(recognize(i))
     verif_code=''.join(verif_code)
-    return _login(username,password,session,verif_code)
+
+    if _login(username,password,session,verif_code):
+        return True,session
+    else:
+        return False,None
 
 def benchmark():
     count=0
     for i in range(1000):
-        if login('',''): #教务账号
+        res,session=login('','') #教务账号
+        if res:
             print "登录成功"
             count+=1
         else:
