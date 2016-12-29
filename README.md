@@ -26,9 +26,10 @@
 1.作为api调用
 ```
 from dean_login import login
-res,session=login('教务账号','密码')  #返回登录是否成功标记res，和登录成功获得的requests session
-response=session.get('http://jiaowu.swjtu.edu.cn/student/score/ScoreNew.jsp')
-print response.text
+res,session=login('教务账号','密码')  #res:登录是否成功，session:登录成功后获取的requests session对象
+if res:
+    response=session.get('http://jiaowu.swjtu.edu.cn/student/score/ScoreNew.jsp')
+    print response.text
 ```
 2.训练  
 ```
