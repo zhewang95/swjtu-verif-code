@@ -1,4 +1,4 @@
-##基于BP神经网络的swjtu教务网验登录证码识别系统
+##基于BP神经网络的swjtu教务网登录验证码识别系统
 ![](bp.png)  
 
 参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！
