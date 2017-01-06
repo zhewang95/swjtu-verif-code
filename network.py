@@ -19,7 +19,7 @@ def cost_derivative(a, y):
     return a - y
 
 
-# 交叉熵损失函数
+# cross-entropy cost function
 class CrossEntropyCost():
     @staticmethod
     def delta(a, y, z):
@@ -30,7 +30,7 @@ class CrossEntropyCost():
         return np.sum(np.nan_to_num(-y * np.log(a) - (1 - y) * np.log(1 - a)), axis=1)
 
 
-# 平方和损失函数
+# quadratic cost function
 class QuadraticCost():
     @staticmethod
     def delta(a, y, z):
