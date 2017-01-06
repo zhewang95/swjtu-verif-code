@@ -31,7 +31,7 @@
 1.作为api调用
 ```python
 from dean_login import login
-res,session=login('教务账号','密码')  #res:登录是否成功，session:登录成功后获取的requests.Session对象
+res,session=login('username','password')  #res:登录是否成功，session:登录成功后获取的requests.Session对象
 if res:
     response=session.get('http://jiaowu.swjtu.edu.cn/student/score/ScoreNew.jsp')
     print response.text
