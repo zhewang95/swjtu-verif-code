@@ -1,6 +1,6 @@
 # created by wz in 2016.12.27
 # encoding=utf-8
-import random, time, cPickle
+import random, time, json
 import numpy as np
 
 
@@ -19,10 +19,10 @@ def cost_derivative(a, y):
     return a - y
 
 
-class Network():
+class Network:
     def __init__(self, sizes=None):
         self.retrain = True
-        if sizes == None:
+        if sizes is None:
             self.load_param()
             self.retrain = False
             return
@@ -100,13 +100,21 @@ class Network():
         return nabla_w, nabla_b
 
     def save_param(self):
-        with open("data/network.pkl", "wb") as f:
-            pickle = cPickle.Pickler(f)
-            pickle.dump([self.sizes, self.layers, self.weights, self.biases])
+        data = {"sizes": self.sizes,
+                "layers": self.layers,
+                "weights": [a.tolist() for a in self.weights],
+                "biases": [a.tolist() for a in self.biases]}
+
+        with open("data/network.json", "wb") as f:
+            json.dump(data, f)
 
     def load_param(self):
-        with open("data/network.pkl", "rb") as f:
-            self.sizes, self.layers, self.weights, self.biases = cPickle.load(f)
+        with open("data/network.json", "rb") as f:
+            data = json.load(f)
+            self.sizes = data["sizes"]
+            self.layers = data["layers"]
+            self.weights = data["weights"]
+            self.biases = data["biases"]
 
 
 def train(size=None, epochs=40, batch_size=50, eta=3.0):

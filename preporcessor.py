@@ -130,6 +130,7 @@ def split(name,chars,img1=None):
         ret.append(item)
     return True,ret
 
+    #显示处理后的图片
     '''
     if len(pos)==4:
         for a in pos:

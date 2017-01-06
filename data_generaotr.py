@@ -1,5 +1,6 @@
-import cPickle,gzip,os
+import cPickle, gzip, os
 from preporcessor import split
+
 
 def generate():
     training = []
@@ -18,22 +19,17 @@ def generate():
                 training.extend(chars)
             elif counter < 2 * 10000:
                 validate.extend(chars)
-            elif counter<3*10000:
+            elif counter < 3 * 10000:
                 test.extend(chars)
             else:
                 break
             counter += 1
     data = [training, validate, test]
 
-    # generate light data
-    with open("data/swjtu_verif.pkl","wb") as f:
-        pickle=cPickle.Pickler(f,protocol=1)
-        pickle.dump(data)
-    return
-
     with gzip.open("data/swjtu_verif.pkl.gz", "wb") as f:
         pickle = cPickle.Pickler(f, protocol=1)
         pickle.dump(data)
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     generate()

@@ -1,8 +1,10 @@
-##基于BP神经网络的swjtu教务网登录验证码识别系统
+##基于BP神经网络的swjtu教务网登录验证码识别系统  
 ![](bp.png)  
 
-参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！
+参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！  
 
+此plain分枝只包含一个最基本的神经网络，只实现了BP和SGD算法，没有采取正则化等优化措施  
+optimized分支加入了一些常用的优化措施  
 目前，字母分割准确率不高为主要问题，分割错误率大于5%  
 分割后的单个字母识别错误率大概小于2%  
 后期考虑在字母分割阶段加入神经网络识别过程，提高分割正确率  
@@ -19,7 +21,7 @@
 |dean_login.py       |登录测试             |
 
 
-`data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，包含200k张训练图片(单个字符)以及验证和测试图片，`network.pkl`为已经训练好的网络参数
+`data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，包含200k张训练图片(单个字符)以及验证和测试图片，`network.json`为已经训练好的网络参数
  
 ###示例：
 
@@ -36,9 +38,8 @@ if res:
 from data_loader import load_data
 from network import Network
 training,validate,test=load_data() #将训练数据解压后使用load_data_raw函数速度更快
-net=Network([17*17,20,26]) #也可不带参数，默认参数为[17*17,20,26]
+net=Network([17*17,20,26]) #也可不带参数，不带参数时网络结构为[17*17,20,26]
 net.SGD(training,40,50,3.0,test) #随机梯度下降算法，也可不带参数
 ```
 
 代码目前还很buggy
-
