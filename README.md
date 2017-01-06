@@ -3,7 +3,8 @@
 
 参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！  
 
-optimized分支加入了一些常用的优化措施  
+加入了一些优化措施的分支，在BP和SGD算法的基础上，加入了正则化、网络参数初始化优化、cross-entropy损失函数  
+原plian分支无优化，更加简单
 目前，字母分割准确率不高为主要问题，分割错误率大于5%  
 分割后的单个字母识别错误率大概小于2%  
 后期考虑在字母分割阶段加入神经网络识别过程，提高分割正确率  
