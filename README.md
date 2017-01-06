@@ -3,7 +3,6 @@
 
 参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！  
 
-此plain分枝只包含一个最基本的神经网络，只实现了BP和SGD算法，没有采取正则化等优化措施  
 optimized分支加入了一些常用的优化措施  
 目前，字母分割准确率不高为主要问题，分割错误率大于5%  
 分割后的单个字母识别错误率大概小于2%  
