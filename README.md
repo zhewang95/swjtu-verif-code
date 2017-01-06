@@ -1,13 +1,16 @@
-##基于BP神经网络的swjtu教务网登录验证码识别系统  
+##基于神经网络的swjtu教务网登录验证码识别系统
 ![](bp.png)  
-
+###说明
 参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！  
 
-加入了一些优化措施的分支，在BP和SGD算法的基础上，加入了正则化、网络参数初始化优化、cross-entropy损失函数  
-原plian分支无优化，更加简单
+加入了一些优化措施的分支，在BP和SGD算法的基础上，加入了正则化、参数初始化优化、cross-entropy损失函数  
+原plian分支无优化，更加简单  
+
+###识别效果
 目前，字母分割准确率不高为主要问题，分割错误率大于5%  
-分割后的单个字母识别错误率大概小于2%  
-后期考虑在字母分割阶段加入神经网络识别过程，提高分割正确率  
+分割后的单个字母识别正确率能够达到99.5%  
+综合起来，最终准确率能够超过90%  
+后期考虑在字母分割阶段加入神经网络识别过程，提高整体正确率  
 
 ###主要源文件
 
@@ -28,18 +31,24 @@
 1.作为api调用
 ```python
 from dean_login import login
-res,session=login('教务账号','密码')  #res:登录是否成功，session:登录成功后获取的requests session对象
+res,session=login('教务账号','密码')  #res:登录是否成功，session:登录成功后获取的requests.Session对象
 if res:
     response=session.get('http://jiaowu.swjtu.edu.cn/student/score/ScoreNew.jsp')
     print response.text
 ```
-2.训练  
+2.准确率测试
+```python
+from dean_login import benchmark
+benchmark('username','password') #1000次实际登录测试(单进程，单线程)
+
+```
+3.训练  
 ```python
 from data_loader import load_data
 from network import Network
-training,validate,test=load_data() #将训练数据解压后使用load_data_raw函数速度更快
+training,validate,test=load_data() #建议将训练数据解压后使用load_data_raw函数加载数据，否则速度比较慢
 net=Network([17*17,20,26]) #也可不带参数，不带参数时网络结构为[17*17,20,26]
-net.SGD(training,40,50,3.0,test) #随机梯度下降算法，也可不带参数
+net.SGD(training,40,50,1.0,1.0,test) #随机梯度下降算法，除training外，也可不带参数
 ```
 
 代码目前还很buggy

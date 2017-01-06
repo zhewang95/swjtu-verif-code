@@ -103,4 +103,4 @@ def main(start=0, times=1000):
 
 
 if __name__ == '__main__':
-    main(42442, 1)
+    main(0, 1)

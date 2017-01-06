@@ -36,17 +36,20 @@ def login(username, password):
         return False, None
 
 
-def benchmark():
+def benchmark(username,password):
     count = 0
     for i in range(1000):
-        res, session = login('20132185', 'w1995119100')  # 教务账号
-        if res:
-            print "登录成功"
-            count += 1
-        else:
-            print "失败"
+        try:
+            res, session = login(username, password)
+            if res:
+                print "登录成功"
+                count += 1
+            else:
+                print "失败"
+        except:
+            pass
     print count
 
 
 if __name__ == '__main__':
-    benchmark()
+    benchmark('','') # 教务账号

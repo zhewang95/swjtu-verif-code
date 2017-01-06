@@ -1,6 +1,6 @@
 # created by wz in 2016.12.27
 # encoding=utf-8
-import random, time, json
+import random, time, json, sys
 import numpy as np
 
 
@@ -19,17 +19,35 @@ def cost_derivative(a, y):
     return a - y
 
 
+# 交叉熵损失函数
+class CrossEntropyCost():
+    @staticmethod
+    def delta(a, y, z):
+        return a - y
+
+    @staticmethod
+    def getCost(a, y):
+        return np.sum(np.nan_to_num(-y * np.log(a) - (1 - y) * np.log(1 - a)), axis=1)
+
+
+# 平方和损失函数
+class QuadraticCost():
+    @staticmethod
+    def delta(a, y, z):
+        return (a - y) * sigmoid_prime(z)
+
+    @staticmethod
+    def getCost(a, y):
+        return (np.linalg.norm(a - y, ord=2, axis=1) ** 2) / 2  # 二阶范数
+
+
 class Network:
-    def __init__(self, sizes=None):
-        self.retrain = True
-        if sizes is None:
-            self.load_param()
-            self.retrain = False
-            return
+    def __init__(self, sizes=None, cost=CrossEntropyCost):
         self.sizes = sizes
         self.layers = len(sizes)
-        self.weights = [np.random.randn(b, a) for a, b in zip(sizes[:-1], sizes[1:])]
+        self.weights = [np.random.randn(b, a) / np.sqrt(a) for a, b in zip(sizes[:-1], sizes[1:])]
         self.biases = [np.random.randn(a, 1) for a in sizes[1:]]
+        self.cost = cost
 
     def evaluate(self, test_data):
         res = [(self.feedforward(x[0]).argmax(), x[1].argmax()) for x in test_data]
@@ -40,28 +58,57 @@ class Network:
             x = sigmoid(np.dot(w, x) + b)
         return x
 
-    def SGD(self, training_data, epochs, batch_size, eta, test_data=None):
-        l = len(training_data)
+    def SGD(self, training_data, epochs, batch_size, eta, lmbda=1.0, test_data=None,
+            train_cost=False,
+            train_accuracy=False,
+            test_cost=False,
+            test_accuracy=False):
+        l_train = len(training_data)
+        l_test = len(test_data) if test_data else 0
+
+        train_costs = []
+        train_accuracys = []
+        test_costs = []
+        test_accuracys = []
+
         st = time.clock()
         st1 = st
-        print "start training at {0}".format(st)
+        print "start training at {0:.2f}S".format(st)
         for i in xrange(epochs):
             random.shuffle(training_data)  # stochastic
-            batchs = [training_data[pos:pos + batch_size] for pos in xrange(0, l, batch_size)]
+            batchs = [training_data[pos:pos + batch_size] for pos in xrange(0, l_train, batch_size)]
             for batch in batchs:
-                self.process_one_batch(batch, eta)
+                self.process_one_batch(batch, eta, lmbda, l_train)
             print "Epoch {0}:".format(i + 1)
             t = time.clock()
-            print "completed in {0}".format(t - st)
+            print "completed in {0:.2f}S".format(float(t - st))
             st = t
+
+            if train_cost:
+                cost = self.calCost(training_data, lmbda)
+                print "train cost:{0:.2f}".format(1.0*cost)
+                train_costs.append(cost)
+            if train_accuracy:
+                accuracy = self.evaluate(training_data) / l_train
+                print "train accuracy:{0}".format(accuracy)
+                train_accuracys.append(1.0 * accuracy / l_train)
+
             if test_data:
-                print "test result: {0}/{1}".format(self.evaluate(test_data), len(test_data))
-        print "{0} Epochs ended in {1}".format(epochs, t - st1)
+                if test_cost:
+                    cost = self.calCost(test_data, lmbda)
+                    print "test cost:{0:.2f}".format(1.0*cost)
+                    test_costs.append(cost)
+                if test_accuracy:
+                    corrects = self.evaluate(test_data)
+                    accuracy = 1.0 * corrects / l_test
+                    test_accuracys.append(accuracy)
+                    print "test accuracy: {0}/{1}={2:.3}".format(corrects, l_test, accuracy)
 
-        if self.retrain:
-            self.save_param()
+        print "{0} Epochs ended in {1:.2f}S".format(epochs, t - st1)
+        self.save_param()
+        return train_costs, train_accuracys, test_costs, test_accuracys
 
-    def process_one_batch(self, batch, eta):
+    def process_one_batch(self, batch, eta, lmbda, l_train):
         batch_size = len(batch)
         x = [i[0] for i in batch]
         y = [i[1] for i in batch]
@@ -69,7 +116,7 @@ class Network:
 
         nabla_w = map(lambda x: np.sum(x, axis=0), nabla_w)
         nabla_b = map(lambda x: np.sum(x, axis=0), nabla_b)
-        self.weights = [w - eta * ww / batch_size for w, ww in zip(self.weights, nabla_w)]
+        self.weights = [(1 - lmbda * eta / l_train) * w - eta * ww / batch_size for w, ww in zip(self.weights, nabla_w)]
         self.biases = [b - eta * bb / batch_size for b, bb in zip(self.biases, nabla_b)]
 
     def back_propagate(self, x, y):
@@ -88,7 +135,7 @@ class Network:
             alist.append(a)
 
         # backpropagate
-        delta = cost_derivative(a, y) * sigmoid_prime(z)
+        delta = self.cost.delta(a, y, z)
         nabla_b[-1] = delta
         nabla_w[-1] = map(np.dot, delta, alist[-2].transpose(0, 2, 1))
         for l in xrange(2, self.layers):
@@ -99,36 +146,44 @@ class Network:
 
         return nabla_w, nabla_b
 
+    def calCost(self, data, lmbda):
+        c0 = sum(self.cost.getCost(self.feedforward(a[0]), a[1]) for a in data)
+        c1 = sum((np.linalg.norm(w)) ** 2 for w in self.weights) * lmbda / len(data) / 2
+        print c0,c1,type(c0),type(c1)
+        return c0 + c1
+
     def save_param(self):
         data = {"sizes": self.sizes,
-                "layers": self.layers,
                 "weights": [a.tolist() for a in self.weights],
-                "biases": [a.tolist() for a in self.biases]}
-
+                "biases": [a.tolist() for a in self.biases],
+                "cost": str(self.cost.__name__)}
         with open("data/network.json", "wb") as f:
             json.dump(data, f)
 
-    def load_param(self):
-        with open("data/network.json", "rb") as f:
-            data = json.load(f)
-            self.sizes = data["sizes"]
-            self.layers = data["layers"]
-            self.weights = data["weights"]
-            self.biases = data["biases"]
+
+def load_network():
+    with open("data/network.json", "rb") as f:
+        data = json.load(f)
+    sizes = data["sizes"]
+    cost = getattr(sys.modules[__name__], data["cost"])
+    net = Network(sizes, cost=cost)
+    net.weights = data["weights"]
+    net.biases = data["biases"]
+    return net
 
 
-def train(size=None, epochs=40, batch_size=50, eta=3.0):
+def train(size=None, epochs=40, batch_size=50, eta=1.0, lmbda=1.0):
     import data_loader
-    a, b, c = data_loader.load_data()
+    a, b, c = data_loader.load_data_raw()
     if size:
         net = Network(size)
     else:
         net = Network([17 * 17, 20, 26])
-    net.SGD(a, epochs, batch_size, eta, c)
+    net.SGD(a, epochs, batch_size, eta, lmbda, c,test_accuracy=True)
 
 
 def recognize(x):
-    net = Network()
+    net = load_network()
     res = net.feedforward(x)
     return chr(res.argmax() + ord('A'))
 
