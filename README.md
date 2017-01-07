@@ -53,7 +53,7 @@ from network import Network
 
 training,validate,test=load_data() #建议将swjtu_verif.pkl.gz解压后使用load_data_raw函数加载数据，否则速度比较慢
 net=Network([17*17,20,26]) #也可不带参数，不带参数时网络结构为[17*17,20,26]
-net.SGD(training,40,50,1.0,1.0,test) #随机梯度下降算法，除training外的参数可不带
+net.SGD(training,40,50,0.5,2.0,test) #随机梯度下降算法，除training外的参数可不带
 ```
 
 代码目前还很buggy
