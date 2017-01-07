@@ -28,8 +28,13 @@ plian分支无优化，更加简单
 `data`目录下的`swjtu_verif.pkl.gz`为处理好的训练数据，包含200k张训练图片(单个字符)以及验证和测试图片。`network.json`为已经训练好的网络参数，直接使用神经网络识别验证码时会从该文件中加载网络参数。
  
 ###示例：
-
-1.作为api调用
+1.安装依赖
+```shell
+git clone git@github.com:wzbazinga/swjtu-verif-code.git
+cd swjtu-verif-code
+pip install -r requirements.txt
+```
+2.作为api调用
 ```python
 from dean_login import login
 
@@ -40,20 +45,19 @@ if res:
 else:
     print 'oops'
 ```
-2.准确率测试
+3.准确率测试
 ```python
 from dean_login import benchmark
 
 benchmark('username','password') #1000次实际登录测试(单进程，单线程)
 ```
-3.训练  
+4.训练  
 ```python
 from data_loader import load_data
 from network import Network
 
 training,validate,test=load_data() #建议将swjtu_verif.pkl.gz解压后使用load_data_raw函数加载数据，否则速度比较慢
 net=Network([17*17,20,26]) #也可不带参数，不带参数时网络结构为[17*17,20,26]
-net.SGD(training,40,50,0.5,2.0,test) #随机梯度下降算法，除training外的参数可不带
+net.SGD(training,40,50,0.5,2.0,test,test_accuracy=True) #随机梯度下降算法，除training外的参数可不带
 ```
-
 代码目前还很buggy
