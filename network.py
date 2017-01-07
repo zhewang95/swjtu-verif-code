@@ -1,5 +1,5 @@
-# created by wz in 2016.12.27
 # encoding=utf-8
+# created by wz in 2016.12.27
 import random, time, json, sys
 import numpy as np
 
@@ -14,11 +14,6 @@ def sigmoid_prime(x):
     return sigmoid(x) * (1 - sigmoid(x))
 
 
-# partial derivatives of C a
-def cost_derivative(a, y):
-    return a - y
-
-
 # cross-entropy cost function
 class CrossEntropyCost():
     @staticmethod
@@ -26,8 +21,8 @@ class CrossEntropyCost():
         return a - y
 
     @staticmethod
-    def getCost(a, y):
-        return np.sum(np.nan_to_num(-y * np.log(a) - (1 - y) * np.log(1 - a)), axis=1)
+    def calCost(a, y):
+        return sum(np.sum(np.nan_to_num(-y * np.log(a) - (1 - y) * np.log(1 - a)), axis=1))
 
 
 # quadratic cost function
@@ -37,12 +32,12 @@ class QuadraticCost():
         return (a - y) * sigmoid_prime(z)
 
     @staticmethod
-    def getCost(a, y):
-        return (np.linalg.norm(a - y, ord=2, axis=1) ** 2) / 2  # 二阶范数
+    def calCost(a, y):
+        return sum((np.linalg.norm(a - y, ord=2, axis=1) ** 2) / 2)  # 2 order norm
 
 
 class Network:
-    def __init__(self, sizes=None, cost=CrossEntropyCost):
+    def __init__(self, sizes=None, cost=QuadraticCost):
         self.sizes = sizes
         self.layers = len(sizes)
         self.weights = [np.random.randn(b, a) / np.sqrt(a) for a, b in zip(sizes[:-1], sizes[1:])]
@@ -86,7 +81,7 @@ class Network:
 
             if train_cost:
                 cost = self.calCost(training_data, lmbda)
-                print "train cost:{0:.2f}".format(1.0*cost)
+                print "train cost:{0:.4f}".format(1.0*cost)
                 train_costs.append(cost)
             if train_accuracy:
                 accuracy = self.evaluate(training_data) / l_train
@@ -96,7 +91,7 @@ class Network:
             if test_data:
                 if test_cost:
                     cost = self.calCost(test_data, lmbda)
-                    print "test cost:{0:.2f}".format(1.0*cost)
+                    print "test cost:{0:.4f}".format(1.0*cost)
                     test_costs.append(cost)
                 if test_accuracy:
                     corrects = self.evaluate(test_data)
@@ -147,9 +142,8 @@ class Network:
         return nabla_w, nabla_b
 
     def calCost(self, data, lmbda):
-        c0 = sum(self.cost.getCost(self.feedforward(a[0]), a[1]) for a in data)
+        c0 = sum(self.cost.calCost(self.feedforward(a[0]), a[1]) for a in data)/len(data)
         c1 = sum((np.linalg.norm(w)) ** 2 for w in self.weights) * lmbda / len(data) / 2
-        print c0,c1,type(c0),type(c1)
         return c0 + c1
 
     def save_param(self):
@@ -172,7 +166,7 @@ def load_network():
     return net
 
 
-def train(size=None, epochs=40, batch_size=50, eta=1.0, lmbda=1.0):
+def train(size=None, epochs=40, batch_size=50, eta=0.5, lmbda=2.0):
     import data_loader
     a, b, c = data_loader.load_data_raw()
     if size:

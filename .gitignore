@@ -1,4 +1,5 @@
 .pyc
 pic/
+env/
 .idea/
 data/swjtu_verif*.pkl
