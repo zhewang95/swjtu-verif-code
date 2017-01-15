@@ -1,0 +1,80 @@
+name: "SwjtuNet"
+
+layer{
+    name:"verif-code"
+    type:"Data"
+    top:"data"
+    top:"label"
+    include{
+        phase:TRAIN
+    }
+    transform_param{
+        scale:1.0
+    }
+    data_param{
+        source:"data/swjtu_verif_train_lmdb"
+        batch_size:1000
+        backend:LMDB
+    }
+}
+
+layer{
+    name:"verif_code"
+    type:"Data"
+    top:"data"
+    top:"label"
+    include{
+        phase:TEST
+    }
+    transform_param{
+        scale:1.0
+    }
+    data_param{
+        source:"data/swjtu_verif_test_lmdb"
+        batch_size:500
+        backend:LMDB
+    }
+}
+
+layer{
+    name:"full_connect"
+    type:"InnerProduct"
+    bottom:"data"
+    top:"ip"
+    param{
+        lr_mult:1
+    }
+    param{
+        lr_mult:2
+    }
+    inner_product_param{
+        num_output:26
+        weight_filler{
+            type:"xavier"
+        }
+        bias_filler{
+            type:"constant"
+        }
+    }
+}
+
+
+
+layer{
+    name:"output_loss"
+    type:"SoftmaxWithLoss"
+    bottom:"ip"
+    bottom:"label"
+    top:"loss"
+}
+
+layer{
+    name:"accuracy"
+    type:"Accuracy"
+    include{
+        phase:TEST
+    }
+    bottom:"ip"
+    bottom:"label"
+    top:"accuracy"
+}

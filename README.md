@@ -1,11 +1,8 @@
 ##基于神经网络的swjtu教务网登录验证码识别系统
-![](bp.png)  
 ###说明
 参照[mnielsen](https://github.com/mnielsen)的[教程](http://neuralnetworksanddeeplearning.com/)实现的一个简单BP神经网络，在此向mnielsen表示感谢！  
 
-加入了一些优化措施的分支，在BP和SGD算法的基础上，加入了正则化、参数初始化优化、cross-entropy损失函数  
-此分支稳定后会merge到master分支  
-plian分支无优化，更加简单  
+使用caffe深度学习框架实现的分支
 
 ###识别效果
 目前，字母分割准确率不高为主要问题，分割错误率大于5%  
