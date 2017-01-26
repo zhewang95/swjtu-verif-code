@@ -16,12 +16,12 @@ stepsize: 4000
 max_iter: 20000
 # momentum(friction)
 momentum: 0.9
-weight_decay:0.00005
+weight_decay:0.005
 
 # display interval
 display: 100
 # snapshot interval
 snapshot: 5000
-snapshot_prefix: "snapshot/"
+snapshot_prefix: "snapshot/swjtu_verif"
 # solver_mode: CPU or GPU
 solver_mode: CPU
