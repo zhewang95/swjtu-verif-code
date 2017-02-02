@@ -2,5 +2,5 @@
 pic/
 env/
 .idea/
-data/
-snapshot/
+data/*.*
+snapshot/*.*
