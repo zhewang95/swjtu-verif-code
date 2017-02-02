@@ -11,7 +11,7 @@ base_lr: 0.0001
 # Drop the learning rate by a factor of gamma
 gamma: 0.1
 # Drop the learning rate every stepsize iterations
-stepsize: 4000
+stepsize: 2000
 # max iterations times
 max_iter: 20000
 # momentum(friction)
