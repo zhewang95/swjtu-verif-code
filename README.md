@@ -15,4 +15,7 @@
 
  
 ###示例：
-todo
+训练
+```shell
+caffe train -solver solver.prototxt
+```
